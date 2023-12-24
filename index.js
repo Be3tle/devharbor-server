@@ -61,6 +61,14 @@ async function run() {
       res.send(result);
     });
 
+    app.get('/tasks/:email', async (req, res) => {
+      const email = req.params.email;
+      const userEmail = { email: email };
+      const result = await taskCollection.find(userEmail).toArray();
+      // console.log(result)
+      res.send(result);
+    });
+
     // Additional database operations can be performed here
   } finally {
     // Don't forget to close the connection when done
