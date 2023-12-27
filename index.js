@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 // middleware
 app.use(
   cors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'https://dev-harbor.web.app'],
     credentials: true,
   })
 );
@@ -29,29 +29,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const userCollection = client.db('dhDB').collection('users');
     const taskCollection = client.db('dhDB').collection('tasks');
-
-    // users api
-    app.post('/users', async (req, res) => {
-      const user = req.body;
-      const result = await userCollection.insertOne(user);
-      res.send(result);
-    });
-
-    app.get('/users', async (req, res) => {
-      const result = await userCollection.find().toArray();
-      res.send(result);
-    });
-
-    app.get('/users', async (req, res) => {
-      let query = {};
-      if (req.query?.reqEmail) {
-        query = { reqEmail: req.query?.reqEmail };
-      }
-      const result = await userCollection.find(query).toArray();
-      res.send(result);
-    });
 
     // tasks api
 
@@ -69,9 +47,8 @@ async function run() {
       res.send(result);
     });
 
-    // Additional database operations can be performed here
+    
   } finally {
-    // Don't forget to close the connection when done
   }
 }
 run().catch(console.dir);
